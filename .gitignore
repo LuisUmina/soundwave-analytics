@@ -1,19 +1,30 @@
-# Python virtual environment
+# PYTHON ENVIRONMENT
 venv/
-
-# Python bytecode
 __pycache__/
-*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+ENV/
+.venv/
 
-# Jupyter Notebooks checkpoints
+# JUPYTER / NOTEBOOKS
 .ipynb_checkpoints/
+*.ipynb
 
-# VSCode
-.vscode/
+# DATA FILES
+data_lake/raw/
+data_lake/processed/
+*.csv
+*.parquet
 
-# System
+# DOCKER / TEMP
+*.log
+*.pid
+*.db
+*.sqlite3
+
+# SYSTEM FILES / OS
 .DS_Store
 Thumbs.db
-
-# Data lake & outputs (opcional, si usas datos pesados)
-data_lake/raw/
