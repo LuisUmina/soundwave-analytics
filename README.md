@@ -29,6 +29,17 @@ It is built to simulate the kind of data infrastructure used by companies like S
 
 ---
 
+## 📡 Data Sources
+
+This project ingests and processes data from:
+
+- **CSV files**: Users, songs, and play logs (simulating internal logs)
+- **Spotify API**: Real-world data from artists and albums
+
+All sources are processed into Parquet format and stored in a structured Data Lake.
+
+---
+
 ## 📁 Project Structure
 
 ```bash
@@ -65,6 +76,12 @@ source venv/bin/activate  # Windows: .\venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Run data ingestion scripts
+python scripts/ingestion/extract_users.py
+python scripts/ingestion/extract_songs.py
+python scripts/ingestion/extract_play_logs.py
+python scripts/ingestion/extract_spotify.py
 ```
 
 ---
