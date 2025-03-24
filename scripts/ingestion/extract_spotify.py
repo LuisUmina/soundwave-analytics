@@ -1,3 +1,7 @@
+"""
+Extracts artist and album data from Spotify API and saves it to the data lake as Parquet files.
+"""
+
 import os
 import requests
 import base64
@@ -5,7 +9,6 @@ import pandas as pd
 import logging
 from dotenv import load_dotenv
 from typing import List, Dict
-
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -19,6 +22,16 @@ ARTIST_OUTPUT_PATH = "data_lake/processed/spotify_artists.parquet"
 ALBUM_OUTPUT_PATH = "data_lake/processed/spotify_albums.parquet"
 
 def authenticate_spotify(client_id: str, client_secret: str) -> str:
+    """
+    Authenticates with the Spotify API using client credentials.
+
+    Args:
+        client_id (str): Spotify API client ID.
+        client_secret (str): Spotify API client secret.
+
+    Returns:
+        str: Access token for further requests.
+    """
     url = "https://accounts.spotify.com/api/token"
     headers = {
         "Authorization": "Basic " + base64.b64encode(f"{client_id}:{client_secret}".encode()).decode(),
@@ -33,6 +46,16 @@ def authenticate_spotify(client_id: str, client_secret: str) -> str:
     return response.json()["access_token"]
 
 def get_artist_info(artist_name: str, token: str) -> Dict:
+    """
+    Searches for an artist and retrieves their Spotify metadata.
+
+    Args:
+        artist_name (str): Name of the artist to search.
+        token (str): Spotify API access token.
+
+    Returns:
+        dict: Artist information (ID, name, followers, popularity, genres).
+    """
     search_url = f"https://api.spotify.com/v1/search?q={artist_name}&type=artist&limit=1"
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.get(search_url, headers=headers)
@@ -54,6 +77,16 @@ def get_artist_info(artist_name: str, token: str) -> Dict:
     }
 
 def get_albums_by_artist(artist_id: str, token: str) -> List[Dict]:
+    """
+    Retrieves all albums for a given artist.
+
+    Args:
+        artist_id (str): Spotify ID of the artist.
+        token (str): Spotify API access token.
+
+    Returns:
+        List[dict]: List of album metadata (album_id, name, release_date, total_tracks, etc.).
+    """
     url = f"https://api.spotify.com/v1/artists/{artist_id}/albums?limit=50"
     headers = {"Authorization": f"Bearer {token}"}
     response = requests.get(url, headers=headers)
@@ -77,6 +110,13 @@ def get_albums_by_artist(artist_id: str, token: str) -> List[Dict]:
     return album_data
 
 def save_parquet(df: pd.DataFrame, path: str):
+    """
+    Saves a DataFrame as a Parquet file with snappy compression.
+
+    Args:
+        df (pd.DataFrame): DataFrame to save.
+        path (str): File path to save the output.
+    """
     os.makedirs(os.path.dirname(path), exist_ok=True)
     df.to_parquet(path, compression="snappy", index=False)
     logging.info(f"Saved file: {path}")
