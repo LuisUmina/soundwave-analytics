@@ -96,6 +96,20 @@ python scripts/ingestion/extract_spotify.py
 
 ---
 
+---
+
+## 🧩 Data Warehouse Schema
+
+The data warehouse follows a dimensional **Star Schema**, designed for performance and clarity in analytical queries.
+
+- Central fact table: `fact_plays`
+- Connected dimensions: users, songs, artists, albums, devices, and dates
+
+📎 [View Star Schema Diagram and Documentation](docs/modeling/DWH_star_schema_v1.md)
+
+
+---
+
 ## 👨‍💻 Author
 Made with 💙 by [@LuisUmina](https://github.com/LuisUmina)
 
